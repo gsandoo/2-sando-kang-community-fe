@@ -9,17 +9,12 @@ const loading = document.getElementById('loading');
 let page = 1;
 let isLoading = false; // 중복 요청 방지
 
-modifyBtn.addEventListener("click",  handleLocation("/html/Posts.html"));
+modifyBtn.addEventListener("click",  clickHandler);
 
 
 function clickHandler(){
     handleLocation("/html/make post.html");
 }
-
-modifyBtn.addEventListener("click", clickHandler);
-
-
-
 
 // TODO: 인피니티 스크롤링
 // 게시글을 불러와서 DOM에 추가하는 함수

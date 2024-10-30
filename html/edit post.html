@@ -4,22 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 수정 페이지</title>
+    <link rel="stylesheet" href="/css/common/container/container.css">
+    <link rel="stylesheet" href="/css/common/header/header_2.css">
     <link rel="stylesheet" href="/css/edit post.css">
     <link rel="icon" href="/assets/images/logo/favicon_1.png"/>
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="back">
-                <button class ="page-back"> < </button>
-            </div>
-            <div class="title">
-                <h1>아무 말 대잔치</h1>
-            </div>
-            <div class="icon">
-                <img src="/assets/images/logo/board-list-icon.png" alt="사용자 아이콘" class="user-icon">
-            </div>
-        </header>
+        <div id="header"></div>
         <h2>게시글 수정</h2>
         <form action="#" method="post">
             <label for="title">제목*</label>
@@ -39,6 +31,7 @@
             <button class="submit-button" type="submit">수정하기</button>
         </form>
     </div>
+    <script src="/js/common/header_2.js"></script>
     <script src="/js/edit post.js"></script>
 </body>
 </html>

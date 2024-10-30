@@ -1,31 +1,41 @@
 // 글 작성 시 버튼 색상 변경
 const textarea = document.getElementById('text');
 const commentSubmitDiv = document.querySelector('.comment-submit');
-
 // 댓글 삭제 모달
 const commentModal = document.querySelector('.comment-modal');
 const commentBtnOpenModal=document.querySelector('.comment-delete');
 const commentDeleteCancel = document.querySelector('#comment-cancel');
 const commentDeleteOk = document.querySelector('#comment-ok');
-
 // 글 삭제 모달
 const modal = document.querySelector('.modal');
 const btnOpenModal=document.querySelector('.delete');
 const deleteCancel = document.querySelector('#cancel');
 const deleteOk = document.querySelector('#ok');
-
+const authorName = document.querySelector('.author-name');
 // 수정 버튼 클릭 시 수정 페이지 이동
 const modifyBtn = document.querySelector(".edit");
-
 //댓글 등록 시 서버 요청 후 데이터 저장 
 const commentSubmin = document.querySelector('.comment-submit');
-
-
 // 댓글 수정
 const editButtons = document.querySelectorAll('.comment-edit');
 const submitButton = document.querySelector('.comment-submit');
 const commentField = document.getElementById('text');
 
+
+// 페이지 로드 시 수정된 데이터 적용
+window.addEventListener('DOMContentLoaded', function () {
+    // localStorage에서 수정된 데이터 가져오기
+    const updatedTitle = localStorage.getItem('updatedTitle');
+    const updatedContent = localStorage.getItem('updatedContent');
+
+    // 수정된 데이터가 있는 경우 페이지에 반영
+    if (updatedTitle) {
+        document.querySelector('h2').innerText = updatedTitle;
+    }
+    if (updatedContent) {
+        document.querySelector('.post-article p').innerText = updatedContent;
+    }
+});
 
 textarea.addEventListener('input', function() {
     if (textarea.value.trim() !== '') {
@@ -44,6 +54,10 @@ textarea.addEventListener('input', function() {
 modifyBtn.addEventListener("click", clickHandler);
 
 function clickHandler(){
+    const title = document.querySelector('h2').innerText;
+    const content = document.querySelector('.post-article p').innerText;
+    localStorage.setItem('editTitle', title);
+    localStorage.setItem('editContent', content);
     handleLocation("/html/edit post.html");
 }
 
@@ -59,7 +73,8 @@ deleteCancel.addEventListener("click", ()=>{
 
 // 작성자 삭제 시 서버 요청 후 데이터 삭제
 deleteOk.addEventListener("click", ()=>{
-    ///
+    alert(authorName.innerText+"의 글이 삭제 되었습니다.")
+    modal.style.display="none";
 })
 
 // ------------------------------------

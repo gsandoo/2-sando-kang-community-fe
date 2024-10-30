@@ -13,7 +13,7 @@ let nicknameError = document.getElementById('nicknameError');
 // 파일 입력 요소와 이미지 및 버튼 요소 선택
 const fileInput = document.getElementById('fileInput');
 const profileImage = document.getElementById('profileImage');
-const initialText = document.getElementById('initialText');
+
 const uploadButton = document.getElementById('uploadButton');
 const profileImageContainer = document.getElementById('profileImageContainer');
 const backButton = document.querySelector('.back-button');
@@ -138,7 +138,7 @@ fileInput.addEventListener('change', (event) => {
         reader.onload = (e) => {
             profileImage.src = e.target.result;
             profileImage.style.display = 'block';
-            initialText.style.display = 'none';
+            uploadButton.style.display = 'none';
         };
         reader.readAsDataURL(file);
     }

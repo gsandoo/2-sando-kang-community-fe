@@ -30,9 +30,6 @@ function validateForm() {
 title.addEventListener('input', validateForm)
 content.addEventListener('input', validateForm);
 
-
-
-
 function handleLocation(url) {
     window.location.href = url
 }

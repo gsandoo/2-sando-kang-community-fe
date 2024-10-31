@@ -22,8 +22,6 @@ const submitButton = document.querySelector('.comment-submit');
 const commentField = document.getElementById('text');
 
 
-
-
 function modifyHandler(){
     const title = document.querySelector('h2').innerText;
     const content = document.querySelector('.post-article p').innerText;
@@ -138,9 +136,6 @@ textarea.addEventListener('input', function() {
     }
 });
 
-
-
-
 modifyBtn.addEventListener("click", modifyHandler);
 
 btnOpenModal.addEventListener("click", ()=>{
@@ -172,7 +167,6 @@ commentDeleteOk.addEventListener("click", ()=>{
 commentSubmit.addEventListener('click',()=>{
     ///
 })
-
 
 function handleLocation(url) {
     window.location.href = url

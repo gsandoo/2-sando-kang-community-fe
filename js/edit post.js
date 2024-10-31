@@ -69,8 +69,6 @@ function modifyData(e) {
     }
 }
 
-
-
 modifyBtn.addEventListener("click", modifyData);
 backBtn.addEventListener("click", clickHandler);
 

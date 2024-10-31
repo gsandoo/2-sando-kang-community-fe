@@ -16,7 +16,6 @@ const uploadButton = document.getElementById('uploadButton');
 const profileImageContainer = document.getElementById('profileImageContainer');
 const backButton = document.querySelector('.back-button');
 
-
 function validateForm() {
     let emailCheck = false
     let pwCheck = false
@@ -140,7 +139,6 @@ function validateForm() {
   backButton.addEventListener('click', ()=>{
       handleLocation("/html/Log in.html");
   })
-
 
 
   function handleLocation(url) {

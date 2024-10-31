@@ -56,9 +56,6 @@
     )
   }
 
-  inputEmail.addEventListener('input', validateForm)
-  inputPassword.addEventListener('input', validateForm)
-
   function emailValidCheck(email) {
     const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/
     return pattern.test(email)
@@ -69,6 +66,9 @@
       value,
     )
   }
+
+  inputEmail.addEventListener('input', validateForm)
+  inputPassword.addEventListener('input', validateForm)
 
   function handleLocation(url) {
     window.location.href = url

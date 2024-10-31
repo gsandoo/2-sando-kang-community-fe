@@ -1,4 +1,3 @@
-//유효성 검사
 const inputEmail = document.getElementById('email');
 const inputPassword = document.getElementById('password');
 const confirmPassword = document.getElementById('confirm-password');
@@ -8,7 +7,6 @@ let emailError = document.getElementById('emailError');
 let pwError = document.getElementById('passwordError');
 let cfPwError = document.getElementById('confirmPasswordError');
 let nicknameError = document.getElementById('nicknameError');
-
 
 // 파일 입력 요소와 이미지 및 버튼 요소 선택
 const fileInput = document.getElementById('fileInput');
@@ -76,18 +74,11 @@ function validateForm() {
     submit.addEventListener('click', (event) => {
       event.preventDefault()
       if (validateForm()) {
-        
+        alert('TODO: 서버 구축 후 회원가입 api 호출 예정');
         handleLocation('')
       }
     })
   }
-
-
-  inputEmail.addEventListener('input', validateForm)
-  inputPassword.addEventListener('input', validateForm)
-  confirmPassword.addEventListener('input', validateForm);
-  inputNickname.addEventListener('input', validateForm);
-
 
   function emailValidCheck(email) {
     const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/
@@ -123,35 +114,37 @@ function validateForm() {
     }
   }
   
+  inputEmail.addEventListener('input', validateForm)
+  inputPassword.addEventListener('input', validateForm)
+  confirmPassword.addEventListener('input', validateForm);
+  inputNickname.addEventListener('input', validateForm);
+
+  uploadButton.addEventListener('click', () => {
+      fileInput.click();
+  });
+
+  fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+
+      if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+              profileImage.src = e.target.result;
+              profileImage.style.display = 'block';
+              uploadButton.style.display = 'none';
+          };
+          reader.readAsDataURL(file);
+      }
+  });
+
+  backButton.addEventListener('click', ()=>{
+      handleLocation("/html/Log in.html");
+  })
 
 
 
-uploadButton.addEventListener('click', () => {
-    fileInput.click();
-});
-
-fileInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            profileImage.src = e.target.result;
-            profileImage.style.display = 'block';
-            uploadButton.style.display = 'none';
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-backButton.addEventListener('click', ()=>{
-    handleLocation("/html/Log in.html");
-})
-
-
-
-function handleLocation(url) {
-    window.location.href = url
-}
+  function handleLocation(url) {
+      window.location.href = url
+  }
 
 

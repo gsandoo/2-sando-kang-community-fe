@@ -16,69 +16,66 @@ function clickHandler(){
     handleLocation("/html/make post.html");
 }
 
-// TODO: 인피니티 스크롤링
-// 게시글을 불러와서 DOM에 추가하는 함수
-// async function loadPosts() {
-//     if (isLoading) return;
-//     isLoading = true;
-    
-//     // 로딩 표시
-//     loading.style.display = 'block';
-  
-//     try {
-//       // 서버에서 게시글 데이터를 가져오는 API 호출 (예시)
-//       const response = await fetch(`/api/posts?page=${page}`);
-//       const data = await response.json();
-  
-//       // 받아온 데이터가 비어있으면 더 이상 로드하지 않음
-//       if (data.length === 0) {
-//         loading.innerText = '더 이상 게시글이 없습니다.';
-//         return;
-//       }
-  
-//       // 받아온 데이터를 반복문으로 순회하면서 HTML을 생성하고 추가
-//       data.forEach(post => {
-//         const postDiv = document.createElement('div');
-//         postDiv.classList.add('post');
-  
-//         postDiv.innerHTML = `
-//           <div class="post-header">
-//               <h2>${truncateTitle(post.title)}</h2>
-//               <span class="date">${post.date}</span>
-//           </div>
-//           <div class="post-info">
-//               <span>좋아요 ${formatCount(post.likes)}</span>
-//               <span>댓글 ${formatCount(post.comments)}</span>
-//               <span>조회수 ${formatCount(post.views)}</span>
-//           </div>
-//           <div class="author">
-//               <div class="avatar">
-//                   <img src="${post.avatarUrl}" alt="">
-//               </div>
-//               <span>${post.author}</span>
-//           </div>
-//         `;
-  
-//         postContainer.appendChild(postDiv);
-//       });
-  
-//       // 페이지 증가
-//       page++;
-//     } catch (error) {
-//       console.error('Error fetching posts:', error);
-//     } finally {
-//       // 로딩 표시 숨김
-//       loading.style.display = 'none';
-//       isLoading = false;
-//     }
-//   }
+function formatNumber(num) {
+    if (num >= 100000) {
+        return Math.floor(num / 1000) + 'k'; 
+    } else if (num >= 10000) {
+        return (num / 1000).toFixed(0) + 'k'; 
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'k';
+    } else {
+        return num.toString(); 
+    }
+}
 
-//   // 스크롤 이벤트 리스너
-// window.addEventListener('scroll', () => {
-//     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading) {
-//       loadPosts();
-//     }
-//   });
+//  인피니티 스크롤링
+function infinityScrolling() {
+    if (isLoading) return;
+    isLoading = true;
+
+    // 로딩 표시
+    loading.style.display = 'block';
+    
+      for(i = 5 ; i < 100 ; i ++){
+        const postDiv = document.createElement('div');
+        postDiv.classList.add('post');
+  
+        postDiv.innerHTML = `
+          <div class="post-header">
+              <h2>제목${i}</h2>
+              <span class="date">2024-01-01</span>
+          </div>
+          <div class="post-info">
+              <span>좋아요 ${formatNumber(i*100+1000)}</span>
+              <span>댓글 ${formatNumber(i*100+10000)}</span>
+              <span>조회수 ${formatNumber(i*100+100000)}</span>
+          </div>
+          <div class="author">
+              <div class="avatar">
+                  <img src="/assets/images/logo/board-list-icon.png" alt="">
+              </div>
+              <span>작성자${i}</span>
+          </div>
+        `;
+        postContainer.appendChild(postDiv);
+      }
+      // 페이지 증가
+      page++;
+      
+      // 데이터 길이에 따라 stop
+      if(page >= 2) return;
+
+      // 로딩 표시 숨김
+      loading.style.display = 'none';
+      isLoading = false;
+  }
+
+  // 스크롤 이벤트 리스너
+window.addEventListener('scroll', () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading) {
+        infinityScrolling();
+    }
+  });
 
 function handleLocation(url) {
     window.location.href = url

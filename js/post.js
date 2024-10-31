@@ -15,97 +15,22 @@ const authorName = document.querySelector('.author-name');
 // 수정 버튼 클릭 시 수정 페이지 이동
 const modifyBtn = document.querySelector(".edit");
 //댓글 등록 시 서버 요청 후 데이터 저장 
-const commentSubmin = document.querySelector('.comment-submit');
+const commentSubmit = document.querySelector('.comment-submit');
 // 댓글 수정
 const editButtons = document.querySelectorAll('.comment-edit');
 const submitButton = document.querySelector('.comment-submit');
 const commentField = document.getElementById('text');
 
 
-// 페이지 로드 시 수정된 데이터 적용
-window.addEventListener('DOMContentLoaded', function () {
-    // localStorage에서 수정된 데이터 가져오기
-    const updatedTitle = localStorage.getItem('updatedTitle');
-    const updatedContent = localStorage.getItem('updatedContent');
-
-    // 수정된 데이터가 있는 경우 페이지에 반영
-    if (updatedTitle) {
-        document.querySelector('h2').innerText = updatedTitle;
-    }
-    if (updatedContent) {
-        document.querySelector('.post-article p').innerText = updatedContent;
-    }
-});
-
-textarea.addEventListener('input', function() {
-    if (textarea.value.trim() !== '') {
-        commentSubmitDiv.disabled = true;
-        commentSubmitDiv.style.backgroundColor = '#7F6AEE'; // 글자가 있을 때 색상 변경
-        commentSubmitDiv.style.color= '#fff';
-    } else {
-        commentSubmitDiv.disabled = false;
-        commentSubmitDiv.style.backgroundColor = '#ACA0EB'; // 글자가 없을 때 원래 색상으로
-    }
-});
 
 
-// ------------------------------------
-
-modifyBtn.addEventListener("click", clickHandler);
-
-function clickHandler(){
+function modifyHandler(){
     const title = document.querySelector('h2').innerText;
     const content = document.querySelector('.post-article p').innerText;
     localStorage.setItem('editTitle', title);
     localStorage.setItem('editContent', content);
     handleLocation("/html/edit post.html");
 }
-
-// ------------------------------------
-
-btnOpenModal.addEventListener("click", ()=>{
-    modal.style.display="flex";
-}); 
-
-deleteCancel.addEventListener("click", ()=>{
-    modal.style.display="none";
-})
-
-// 작성자 삭제 시 서버 요청 후 데이터 삭제
-deleteOk.addEventListener("click", ()=>{
-    alert(authorName.innerText+"의 글이 삭제 되었습니다.")
-    modal.style.display="none";
-})
-
-// ------------------------------------
-
-commentBtnOpenModal.addEventListener("click", ()=>{
-    commentModal.style.display="flex";
-}); 
-
-commentDeleteCancel.addEventListener("click", ()=>{
-    commentModal.style.display="none";
-})
-
-
-// ------------------------------------
-
-// 댓글 삭제 시 서버 요청 후 데이터 삭제
-commentDeleteOk.addEventListener("click", ()=>{
-    ///
-})
-
-// ------------------------------------
-
-
-commentSubmin.addEventListener('click',()=>{
-
-})
-
-
-// ------------------------------------
-
-
 
 function formatNumber(num) {
     if (num >= 100000) {
@@ -133,49 +58,122 @@ function updatePostStats() {
 }
 
 
-function handleLocation(url) {
-    window.location.href = url
-}
+// 페이지 로드 시 수정된 데이터 적용
+window.addEventListener('DOMContentLoaded', function () {
+    
+    const updatedTitle      = localStorage.getItem('updatedTitle');
+    const updatedContent    = localStorage.getItem('updatedContent');
+    const updatedDate       = localStorage.getItem('updatedDate');
+    const updatedImage      = localStorage.getItem('updatedImage'); 
 
-
-// ------------------------------
-
-
-document.addEventListener('DOMContentLoaded', () => {
-
-    // 현재 수정 중인 댓글 요소를 저장할 변수
     let currentEditComment = null;
+
+    // 수정된 데이터가 있는 경우 페이지에 반영
+    if (updatedTitle) {
+        document.querySelector('h2').innerText = updatedTitle;
+    }
+    if (updatedContent) {
+        document.querySelector('.post-article p').innerText = updatedContent;
+    }
+
+    if (updatedDate) {
+        this.document.querySelector('.author-info span:nth-child(2)').innerText = updatedDate;
+    }
+
+    if (updatedImage) {
+        this.document.querySelector('.post-img img').src = updatedImage;
+    }
 
     // 수정 버튼 클릭 이벤트
     editButtons.forEach(button => {
         button.addEventListener('click', (event) => {
-            const commentDiv = event.target.closest('.comment'); // 클릭한 수정 버튼에 해당하는 댓글 div 찾기
-            const commentContent = commentDiv.querySelector('.comment-content p').innerText; // 기존 댓글 내용
-
-            // 댓글 내용을 텍스트 필드에 넣기
+            const commentDiv = event.target.closest('.comment'); 
+            const commentContent = commentDiv.querySelector('.comment-content p').innerText; 
+            
             commentField.value = commentContent;
-            currentEditComment = commentDiv; // 현재 수정 중인 댓글 div 저장
+            currentEditComment = commentDiv; 
 
-            // 댓글 등록 버튼을 '댓글 수정'으로 변경
             submitButton.innerText = '댓글 수정';
         });
     });
+ 
+     // 댓글 수정 버튼 클릭 이벤트
+     submitButton.addEventListener('click', () => {
+         if (currentEditComment) { 
+             const newContent = commentField.value.trim(); 
+ 
+             if (newContent) { // 내용이 비어있지 않은 경우에만 수정
+                 currentEditComment.querySelector('.comment-content p').innerText = newContent;
+                 
+                 
+                 const now = new Date();
+                 const formattedDate = now.getFullYear() + '-' +
+                                    String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                                    String(now.getDate()).padStart(2, '0') + ' ' +
+                                    String(now.getHours()).padStart(2, '0') + ':' +
+                                    String(now.getMinutes()).padStart(2, '0') + ':' +
+                                    String(now.getSeconds()).padStart(2, '0');
 
-    // 댓글 수정 버튼 클릭 이벤트
-    submitButton.addEventListener('click', () => {
-        if (currentEditComment) { // 수정 중인 댓글이 있을 때만 동작
-            const newContent = commentField.value.trim(); // 수정된 내용 가져오기
+                 currentEditComment.querySelector('.comment-author span:nth-child(2)').innerText = formattedDate;
 
-            if (newContent) { // 내용이 비어있지 않은 경우에만 수정
-                currentEditComment.querySelector('.comment-content p').innerText = newContent;
                 
-                // 수정 완료 후 필드 및 버튼 초기화
-                commentField.value = '';
-                submitButton.innerText = '댓글 등록';
-                currentEditComment = null;
-            } else {
-                alert('댓글 내용을 입력해주세요.'); // 빈 내용을 방지하는 알림
-            }
-        }
-    });
+                 commentField.value = '';
+                 submitButton.innerText = '댓글 등록';
+                 currentEditComment = null;
+             } else {
+                 alert('댓글 내용을 입력해주세요.');
+             }
+         }
+     });
 });
+
+textarea.addEventListener('input', function() {
+    if (textarea.value.trim() !== '') {
+        commentSubmitDiv.disabled = true;
+        commentSubmitDiv.style.backgroundColor = '#7F6AEE'; // 글자가 있을 때 색상 변경
+        commentSubmitDiv.style.color= '#fff';
+    } else {
+        commentSubmitDiv.disabled = false;
+        commentSubmitDiv.style.backgroundColor = '#ACA0EB'; // 글자가 없을 때 원래 색상으로
+    }
+});
+
+
+
+
+modifyBtn.addEventListener("click", modifyHandler);
+
+btnOpenModal.addEventListener("click", ()=>{
+    modal.style.display="flex";
+}); 
+
+deleteCancel.addEventListener("click", ()=>{
+    modal.style.display="none";
+})
+
+deleteOk.addEventListener("click", ()=>{
+    alert(authorName.innerText+"의 글이 삭제 되었습니다.")
+    modal.style.display="none";
+})
+
+commentBtnOpenModal.addEventListener("click", ()=>{
+    commentModal.style.display="flex";
+}); 
+
+commentDeleteCancel.addEventListener("click", ()=>{
+    commentModal.style.display="none";
+})
+
+// TODO: 댓글 삭제 시 서버 요청 후 데이터 삭제
+commentDeleteOk.addEventListener("click", ()=>{
+    ///
+})
+// TODO: 댓글 등록 시 서버 요청 후 데이터 저장
+commentSubmit.addEventListener('click',()=>{
+    ///
+})
+
+
+function handleLocation(url) {
+    window.location.href = url
+}

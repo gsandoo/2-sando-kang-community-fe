@@ -40,7 +40,12 @@ function validateNickname(nickname) {
         nicknameError.innerText = '  *닉네임 최대 10자까지 가능합니다.';
         nicknameError.style.display = 'block';
         return false;
-    } else {
+    }else if (nickname == document.getElementById('nickname').placeholder) {
+        nicknameError.innerText = '  *중복된 닉네임 입니다';
+        nicknameError.style.display = 'block';
+        return false;
+    } 
+    else {
         nicknameError.style.display = 'none';
         return true;
     }

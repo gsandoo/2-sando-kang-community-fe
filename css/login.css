@@ -102,7 +102,7 @@
   transition: background-color 0.3s ease;
 }
 
-.signIn:hover{
+.signin-button:hover{
   background-color: lightgray;
   cursor: pointer;
 }

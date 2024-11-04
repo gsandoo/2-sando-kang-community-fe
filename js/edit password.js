@@ -47,10 +47,39 @@ function validateForm() {
  // TODO: 회원가입 api 연동 추가
  if (submit) {
     submit.addEventListener('click', (event) => {
-      event.preventDefault()
+      event.preventDefault();
+
       if (validateForm()) {
-        
-        handleLocation('')
+        const userId = getLocalStorage('userId');
+        const password = inputPassword.value.trim();
+          
+        if (userId) {
+          fetch('http://localhost:3000/api/auth/withdraw', {
+              method: 'PATCH',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ 
+                user_id: userId,
+                password : password 
+              }), 
+          })
+          .then(response => response.json()) 
+          .then(data => {
+              if(data.success){
+                  alert("비밀번호가 수정되었습니다.");
+                  localStorage.removeItem('password');
+                  saveLocalStorage('password', password);
+                  handleLocation('/html/Posts.html'); 
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert(`오류: ${error.message}`); 
+          });
+        } else {
+          alert('사용자 ID를 찾을 수 없습니다.'); 
+        }
       }
     })
   }
@@ -68,6 +97,16 @@ function validateForm() {
     return value === inputPassword.value.trim();
   }
 
+
+  function saveLocalStorage(key, value) {
+    localStorage.setItem(key, value);
+  }
+
+  function getLocalStorage(key) {
+    const storedValue = localStorage.getItem(key);
+    return storedValue;
+  }
+
   function handleLocation(url) {
     window.location.href = url
-}
+  }

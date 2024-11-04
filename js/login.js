@@ -1,3 +1,5 @@
+
+  
   const signInTxt = document.querySelector('.signin-button')
   const inputEmail = document.getElementById('email')
   const inputPassword = document.getElementById('password')
@@ -32,6 +34,10 @@
     if (emailCheck && pwCheck) {
       submit.style.backgroundColor = '#7f6aee'
       submit.style.cursor = 'pointer'
+      
+      saveLocalStorage('email', inputEmail.value.trim());
+      saveLocalStorage('pw', inputPassword.value.trim());
+     
       return true
     }else{
       submit.style.backgroundColor = '#ACA0EB'
@@ -39,15 +45,38 @@
   }
 
   // TODO: 로그인 api 연동 추가
-  if (submit) {
-    submit.addEventListener('click', (event) => {
-      event.preventDefault()
-      if (validateForm()) {
-        
-        handleLocation('')
-      }
-    })
-  }
+ 
+submit.addEventListener('click', (event) => {
+    event.preventDefault()
+    if (validateForm()) {
+      
+      const email = getLocalStorage('email');
+      const pw = getLocalStorage('pw');
+     
+      fetch(`http://localhost:3000/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: pw,
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        const userId = data.user_id; // `user_id` 값만 추출
+        localStorage.setItem("userId", userId); 
+        handleLocation("/html/Posts.html");
+      })
+      .catch(error => console.error("Error:", error));
+    }    
+  });
+
+  
+  
+   
 
   // TODO: 회원가입 api 연동 추가
   if (signInTxt) {
@@ -70,6 +99,16 @@
   inputEmail.addEventListener('input', validateForm)
   inputPassword.addEventListener('input', validateForm)
 
+
+  function saveLocalStorage(key, value) {
+    localStorage.setItem(key, value);
+  }
+
+  function getLocalStorage(key) {
+    const storedValue = localStorage.getItem(key);
+    return storedValue;
+  }
+
   function handleLocation(url) {
-    window.location.href = url
+    window.location.href = url;
   }

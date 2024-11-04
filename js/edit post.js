@@ -8,11 +8,9 @@ window.addEventListener('DOMContentLoaded', function () {
     const titleInput = document.getElementById('title');
     const contentTextarea = document.getElementById('content');
 
-    // localStorage에서 기존 제목과 내용 가져오기
-    const editTitle = localStorage.getItem('editTitle');
-    const editContent = localStorage.getItem('editContent');
+    const editTitle = getLocalStorage('title');
+    const editContent = getLocalStorage('content');
 
-    // 가져온 데이터를 폼에 채움
     if (editTitle) {
         titleInput.value = editTitle;
     }
@@ -25,27 +23,17 @@ function clickHandler(){
     handleLocation("/html/post.html"); 
 }
 
+function modifyData(event) {
+    event.preventDefault();
 
-function handleLocation(url) {
-    window.location.href = url
-}
-
-function modifyData(e) {
-    e.preventDefault();
-
+    const userId = getLocalStorage('userId');
+    const postId = getLocalStorage('postId')
     const updatedTitle = document.getElementById('title').value;
     const updatedContent = document.getElementById('content').value;
     const fileInput = document.getElementById('image');
 
-    const now = new Date();
-    const formattedDate = now.getFullYear() + '-' +
-        String(now.getMonth() + 1).padStart(2, '0') + '-' +
-        String(now.getDate()).padStart(2, '0') + ' ' +
-        String(now.getHours()).padStart(2, '0') + ':' +
-        String(now.getMinutes()).padStart(2, '0') + ':' +
-        String(now.getSeconds()).padStart(2, '0');
-
     
+    // NOTE: 게시글 이미지 첨부
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         const reader = new FileReader();
@@ -53,14 +41,29 @@ function modifyData(e) {
         reader.onload = function(event) {
             const updatedImg = event.target.result; 
 
-            // 로컬 스토리지에 데이터 저장
-            localStorage.setItem('updatedTitle', updatedTitle);
-            localStorage.setItem('updatedContent', updatedContent);
-            localStorage.setItem('updatedDate', formattedDate);
-            localStorage.setItem('updatedImage', updatedImg);
+            const formData = new FormData();
+            formData.append('user_id', userId);
+            formData.append('post_id', postId);
+            formData.append('title', updatedTitle);
+            formData.append('content', updatedContent);
 
-            // 페이지 이동
-            handleLocation("/html/post.html");
+            if(updatedImg)formData.append('image', updatedImg);
+            
+            fetch(`http://localhost:3000/api/post`, {
+                method: "PUT",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if(data.success){
+                    alert('게시글 수정이 완료되었습니다.');
+                    handleLocation("/html/post.html");
+                }else{
+                    alert(`게시글 수정 중 문제가 발생하였습니다. ${data.message}`);
+                }
+            })
+            .catch(error => console.error("Error:", error));
         };
 
         reader.readAsDataURL(file); 
@@ -83,3 +86,17 @@ fileInput.addEventListener('change', (event) => {
         console.log("파일이 선택되지 않았습니다.");
       }
 });
+
+function saveLocalStorage(key, value) {
+    localStorage.setItem(key, value);
+}
+
+function getLocalStorage(key) {
+    const storedValue = localStorage.getItem(key);
+    return storedValue;
+}
+
+
+function handleLocation(url) {
+    window.location.href = url
+}

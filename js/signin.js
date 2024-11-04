@@ -15,12 +15,15 @@ const profileImage = document.getElementById('profileImage');
 const uploadButton = document.getElementById('uploadButton');
 const profileImageContainer = document.getElementById('profileImageContainer');
 const backButton = document.querySelector('.back-button');
+let imageCheck = false
+
 
 function validateForm() {
     let emailCheck = false
     let pwCheck = false
     let cfPwCheck = false
     let nicknameCheck = false
+    
 
     // 이메일 유효성 검사
     if (!inputEmail.value.trim() || !emailValidCheck(inputEmail.value.trim())) {
@@ -58,11 +61,16 @@ function validateForm() {
     // 닉네임 유효성 검사
     nicknameCheck = nicknameValidCheck(inputNickname.value.trim());
 
-
     if (emailCheck && pwCheck && cfPwCheck && nicknameCheck) {
         submit.style.backgroundColor = '#7f6aee'
         submit.style.cursor = 'pointer'
-        return true
+       
+        saveLocalStorage('email', inputEmail);
+        saveLocalStorage('pw', inputPassword);
+        saveLocalStorage('nickname', inputNickname);
+
+        handleLocation('/html/Log in.html');
+
     }else{
         submit.style.backgroundColor = '#ACA0EB'
     }
@@ -73,10 +81,35 @@ function validateForm() {
     submit.addEventListener('click', (event) => {
       event.preventDefault()
       if (validateForm()) {
-        alert('TODO: 서버 구축 후 회원가입 api 호출 예정');
-        handleLocation('')
-      }
-    })
+        
+        const email = getLocalStorage('email');
+        const pw = getLocalStorage('pw');
+        const nickname = getLocalStorage('nickname');
+        const url = getLocalStorage('imageUrl');
+
+        fetch(`${LOCAL_URL}/api/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: pw,
+            nickname : nickname,
+            profile : url
+          }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          const success = data.success; 
+          const message = data.message;
+          if(success){
+            alert('회원가입이 정상적으로 이루어졌습니다.')
+          }else alert(`회원가입 문제 발생: ${message}`);
+        })
+        .catch(error => console.error("Error:", error));
+      }    
+    });
   }
 
   function emailValidCheck(email) {
@@ -123,6 +156,7 @@ function validateForm() {
   });
 
   fileInput.addEventListener('change', (event) => {
+      let url = null;
       const file = event.target.files[0];
 
       if (file) {
@@ -132,7 +166,11 @@ function validateForm() {
               profileImage.style.display = 'block';
               uploadButton.style.display = 'none';
           };
-          reader.readAsDataURL(file);
+          url = reader.readAsDataURL(file);
+          if(url != null) {
+            imageCheck = true;
+            saveLocalStorage('imageUrl', url);
+        } 
       }
   });
 
@@ -140,6 +178,14 @@ function validateForm() {
       handleLocation("/html/Log in.html");
   })
 
+  function saveLocalStorage(key, value) {
+    localStorage.setItem(key, value);
+  }
+  
+  function getLocalStorage(key) {
+    const storedValue = localStorage.getItem(key);
+    return storedValue;
+  }
 
   function handleLocation(url) {
       window.location.href = url

@@ -59,27 +59,53 @@ function updatePostStats() {
 // 페이지 로드 시 수정된 데이터 적용
 window.addEventListener('DOMContentLoaded', function () {
     
-    const updatedTitle      = localStorage.getItem('updatedTitle');
-    const updatedContent    = localStorage.getItem('updatedContent');
-    const updatedDate       = localStorage.getItem('updatedDate');
-    const updatedImage      = localStorage.getItem('updatedImage'); 
+    
+    const title      = getLocalStorage('title');
+    const content    = getLocalStorage('content');
+    const author     = getLocalStorage('author');
+    const likes      = getLocalStorage('likes');
+    const views      = getLocalStorage('views');
+    const comments   = getLocalStorage('comments');
+    const date       = getLocalStorage('date');
+    const profile    = getLocalStorage('profile'); 
+    
 
     let currentEditComment = null;
 
     // 수정된 데이터가 있는 경우 페이지에 반영
-    if (updatedTitle) {
-        document.querySelector('h2').innerText = updatedTitle;
+    if (title) {
+        document.querySelector('h2').innerText = title;
     }
-    if (updatedContent) {
-        document.querySelector('.post-article p').innerText = updatedContent;
-    }
-
-    if (updatedDate) {
-        this.document.querySelector('.author-info span:nth-child(2)').innerText = updatedDate;
+    if (content) {
+        document.querySelector('.post-article p').innerText = content;
     }
 
-    if (updatedImage) {
-        this.document.querySelector('.post-img img').src = updatedImage;
+    if (date) {
+        this.document.querySelector('.author-info span:nth-child(2)').innerText = date;
+    }
+
+    if (profile) {
+        this.document.querySelector('.post-img img').src = profile;
+    }
+
+    if (author) {
+        this.document.querySelector('.author-name').innerText = author;
+    }
+
+    if (date) {
+        this.document.querySelector('.date').innerText = date;
+    }
+
+    if (likes) {
+        this.document.getElementById('likesCount').innerText = likes + ' 좋아요';
+    }
+
+    if (views) {
+        this.document.getElementById('viewsCount').innerText = views + ' 조회수';
+    }
+
+    if (comments) {
+        this.document.getElementById('commentsCount').innerText = comments + ' 조회수';
     }
 
     // 수정 버튼 클릭 이벤트
@@ -167,6 +193,15 @@ commentDeleteOk.addEventListener("click", ()=>{
 commentSubmit.addEventListener('click',()=>{
     ///
 })
+
+function saveLocalStorage(key, value) {
+    localStorage.setItem(key, value);
+}
+
+function getLocalStorage(key) {
+    const storedValue = localStorage.getItem(key);
+    return storedValue;
+}
 
 function handleLocation(url) {
     window.location.href = url

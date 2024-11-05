@@ -65,10 +65,15 @@ submit.addEventListener('click', (event) => {
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
-        const userId = data.user_id; // `user_id` 값만 추출
-        localStorage.setItem("userId", userId); 
-        handleLocation("/html/Posts.html");
+        const success = data.success;
+        if(success){
+          alert('로그인이 정상적으로 이루어졌습니다.')
+          const userId = data.user_id; // `user_id` 값만 추출
+          localStorage.setItem("userId", userId); 
+          handleLocation("/html/Posts.html");
+        }else{
+          alert(`로그인이 되지 않았습니다. : ${data.message}`);
+        }
       })
       .catch(error => console.error("Error:", error));
     }    
@@ -101,6 +106,7 @@ submit.addEventListener('click', (event) => {
 
 
   function saveLocalStorage(key, value) {
+    localStorage.removeItem(key);
     localStorage.setItem(key, value);
   }
 

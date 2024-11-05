@@ -40,7 +40,7 @@ function modifyData(event) {
 
         reader.onload = function(event) {
             const updatedImg = event.target.result; 
-
+            console.log("img: " + updatedImg)
             const formData = new FormData();
             formData.append('user_id', userId);
             formData.append('post_id', postId);
@@ -88,8 +88,9 @@ fileInput.addEventListener('change', (event) => {
 });
 
 function saveLocalStorage(key, value) {
+    localStorage.removeItem(key);
     localStorage.setItem(key, value);
-}
+  }
 
 function getLocalStorage(key) {
     const storedValue = localStorage.getItem(key);

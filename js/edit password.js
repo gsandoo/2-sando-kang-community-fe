@@ -44,7 +44,7 @@ function validateForm() {
     }
   }
 
- // TODO: 회원가입 api 연동 추가
+ // TODO: 비밀번호 수정
  if (submit) {
     submit.addEventListener('click', (event) => {
       event.preventDefault();
@@ -54,7 +54,7 @@ function validateForm() {
         const password = inputPassword.value.trim();
           
         if (userId) {
-          fetch('http://localhost:3000/api/auth/withdraw', {
+          fetch('http://localhost:3000/api/auth/password', {
               method: 'PATCH',
               headers: {
                   'Content-Type': 'application/json',
@@ -99,9 +99,9 @@ function validateForm() {
 
 
   function saveLocalStorage(key, value) {
+    localStorage.removeItem(key);
     localStorage.setItem(key, value);
   }
-
   function getLocalStorage(key) {
     const storedValue = localStorage.getItem(key);
     return storedValue;

@@ -23,8 +23,8 @@ function validateForm() {
         submit.style.backgroundColor = '#7f6aee'
         submit.style.cursor = 'pointer'
         
-        saveLocalStorage('title', title);
-        saveLocalStorage('content', content);
+        saveLocalStorage('title', title.value.trim());
+        saveLocalStorage('content', content.value.trim());
 
     }else{
         submit.style.backgroundColor = '#ACA0EB'
@@ -34,23 +34,22 @@ function validateForm() {
 function makePost(event) {
     event.preventDefault();
 
-    const title = document.getElementById('title').value;
-    const content = document.getElementById('content').value;
-    const imageFile = document.getElementById('image').files[0]; // 파일 선택
+    const userId = 1;
+    const title = getLocalStorage('title');
+    const content = getLocalStorage('content');
+    const image = getLocalStorage('imageUrl');
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('content', content);
-    
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        const updatedImg = event.target.result;
-        formData.append('image', updatedImg); 
-
-        // 서버에 POST 요청 전송
     fetch('http://localhost:3000/api/post', {
         method: 'POST',
-        body: formData
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            user_id : userId,
+            title: title,
+            content: content,
+            image : image
+          }),
     })
     .then(response => response.json())
     .then(data => {
@@ -66,7 +65,7 @@ function makePost(event) {
         console.error('Error:', error);
         alert('서버 오류가 발생했습니다.');
     });
-    }
+    
 }
 
 title.addEventListener('input', validateForm)
@@ -91,6 +90,7 @@ fileInput.addEventListener('change', (event) => {
 });
 
 function saveLocalStorage(key, value) {
+    localStorage.removeItem(key);
     localStorage.setItem(key, value);
 }
 

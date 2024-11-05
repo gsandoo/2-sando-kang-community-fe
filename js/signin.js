@@ -65,52 +65,56 @@ function validateForm() {
         submit.style.backgroundColor = '#7f6aee'
         submit.style.cursor = 'pointer'
        
-        saveLocalStorage('email', inputEmail);
-        saveLocalStorage('pw', inputPassword);
-        saveLocalStorage('nickname', inputNickname);
+        saveLocalStorage('email', inputEmail.value.trim());
+        saveLocalStorage('pw', inputPassword.value.trim());
+        saveLocalStorage('nickname', inputNickname.value.trim());
 
-        handleLocation('/html/Log in.html');
-
+        return true;
     }else{
         submit.style.backgroundColor = '#ACA0EB'
+        return false;
     }
   }
 
-  // TODO: 회원가입 api 연동 추가
-  if (submit) {
-    submit.addEventListener('click', (event) => {
-      event.preventDefault()
-      if (validateForm()) {
-        
-        const email = getLocalStorage('email');
-        const pw = getLocalStorage('pw');
-        const nickname = getLocalStorage('nickname');
-        const url = getLocalStorage('imageUrl');
+// TODO: 회원가입 api 연동 추가
+submit.addEventListener('click', (event) => {
+    event.preventDefault();
 
-        fetch(`${LOCAL_URL}/api/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: pw,
-            nickname : nickname,
-            profile : url
-          }),
-        })
-        .then(response => response.json())
-        .then(data => {
-          const success = data.success; 
-          const message = data.message;
-          if(success){
-            alert('회원가입이 정상적으로 이루어졌습니다.')
-          }else alert(`회원가입 문제 발생: ${message}`);
-        })
-        .catch(error => console.error("Error:", error));
-      }    
-    });
-  }
+    if (validateForm()) {
+      
+      const email = getLocalStorage('email');
+      const pw = getLocalStorage('pw');
+      const nickname = getLocalStorage('nickname');
+      const url = getLocalStorage('imageUrl');
+
+      fetch(`http://localhost:3000/api/auth/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: pw,
+          nickname : nickname,
+          profile : url
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        const success = data.success; 
+        const message = data.message;
+        if(success){
+          alert('회원가입이 정상적으로 이루어졌습니다.')
+          handleLocation('/html/Posts.html');
+        }else alert(`회원가입 문제 발생: ${message}`);
+      })
+      .catch(error => console.error("Error:", error));
+    }else{
+      console.log('nah')
+      alert('뭐지')
+    }    
+  });
+  
 
   function emailValidCheck(email) {
     const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/
@@ -152,33 +156,35 @@ function validateForm() {
   inputNickname.addEventListener('input', validateForm);
 
   uploadButton.addEventListener('click', () => {
-      fileInput.click();
+    fileInput.click();
   });
 
-  fileInput.addEventListener('change', (event) => {
-      let url = null;
-      const file = event.target.files[0];
+ fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
 
-      if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-              profileImage.src = e.target.result;
-              profileImage.style.display = 'block';
-              uploadButton.style.display = 'none';
-          };
-          url = reader.readAsDataURL(file);
-          if(url != null) {
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const url = e.target.result;
+            profileImage.src = url;
+            profileImage.style.display = 'block';
+            uploadButton.style.display = 'none';
+            
             imageCheck = true;
-            saveLocalStorage('imageUrl', url);
-        } 
-      }
-  });
+            console.log(`File name: ${file.name}`); // 파일 이름만 출력
+            saveLocalStorage('imageUrl', file.name); // 로컬 스토리지에 파일 이름만 저장
+        };
+        reader.readAsDataURL(file); // 파일 읽기 시작
+    }
+});
+
 
   backButton.addEventListener('click', ()=>{
       handleLocation("/html/Log in.html");
   })
 
   function saveLocalStorage(key, value) {
+    localStorage.removeItem(key);
     localStorage.setItem(key, value);
   }
   

@@ -1,4 +1,3 @@
-// 프로필 드롭다운
 const profileImg = document.getElementById('profileImg');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const updateButton = document.getElementById('updateButton');
@@ -9,20 +8,20 @@ const confirmDelete = document.getElementById('confirmDelete');
 const cancelDelete = document.getElementById('cancelDelete');
 const inputNickname = document.getElementById('nickname');
 const nicknameError = document.getElementById('nicknameError');
-const emailInput = document.getElementById('email'); // 이메일 입력 요소 추가
+const emailInput = document.getElementById('email'); 
+const logoutButton = document.querySelector('.dropdown-menu a:last-child'); 
 
-// 파일 입력 요소와 이미지 및 버튼 요소 선택
 const fileInput = document.getElementById('fileInput');
 const profileImage = document.getElementById('profileImage');
 const uploadButton = document.getElementById('uploadButton');
 const profileImageContainer = document.getElementById('profileImageContainer');
 const backButton = document.querySelector('.back-button');
 
-// NOTE: 페이지가 로드될 때 로컬 스토리지에서 데이터 가져오기
 window.onload = function() {
     const email = getLocalStorage('email'); 
     const nickname = getLocalStorage('nickname'); 
     const profileImageSrc = getLocalStorage('profile'); 
+
 
     if (email) {
         emailInput.value = email; 
@@ -34,17 +33,15 @@ window.onload = function() {
 
     if (profileImageSrc) {
         profileImage.src = profileImageSrc; 
-        profileImage.style.display = 'block'; 
+        profileImage.style.display = 'none'; 
     }
 };
 
-// 드롭다운 메뉴 표시
 profileImg.addEventListener('click', () => {
     dropdownMenu.style.maxHeight = 100;
     dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
 });
 
-// 닉네임 유효성 검사 함수
 function validateNickname(nickname) {
     if (!nickname) {
         nicknameError.innerText = '  *닉네임을 입력해주세요.';
@@ -68,7 +65,41 @@ function validateNickname(nickname) {
     }
 }
 
-// 수정하기 버튼 클릭
+function logout(event) {
+    event.preventDefault();
+
+    const userId = getLocalStorage('userId'); 
+
+    if (userId) {
+        fetch('http://localhost:3000/api/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_id: userId }),
+        })
+        .then(response => {
+            return response.json().then(data => {
+                if (response.ok && data.success) {
+                    alert("로그아웃이 완료되었습니다."); 
+                    localStorage.removeItem('userId'); 
+                    handleLocation('/html/login.html'); // 로그인 페이지로 이동
+                } else {
+                    throw new Error(data.message || '로그아웃 실패'); // 오류 발생
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(`오류: ${error.message}`);
+        });
+    } else {
+        alert('사용자 ID를 찾을 수 없습니다.'); // userId가 없을 경우 처리
+    }
+}
+
+
+
 updateButton.addEventListener('click', async () => {
     const nicknameValue = inputNickname.value.trim(); 
     if (validateNickname(nicknameValue)) { 
@@ -141,14 +172,14 @@ confirmDelete.addEventListener('click', () => {
 });
 
 
-// 회원 탈퇴 모달 취소 클릭
+
 cancelDelete.addEventListener('click', () => {
     deleteModal.style.display = 'none';
 });
 
-// 프로필 이미지 업로드
+
 uploadButton.addEventListener('click', () => {
-    fileInput.click(); // 파일 입력 클릭
+    fileInput.click(); 
 });
 
 fileInput.addEventListener('change', (event) => {
@@ -163,12 +194,15 @@ fileInput.addEventListener('change', (event) => {
             
             localStorage.setItem('profile', e.target.result);
         };
-        reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기
+        reader.readAsDataURL(file); 
     }
 });
 
+logoutButton.addEventListener('click', logout); 
+
 
 function saveLocalStorage(key, value) {
+    localStorage.removeItem(key);
     localStorage.setItem(key, value);
 }
 

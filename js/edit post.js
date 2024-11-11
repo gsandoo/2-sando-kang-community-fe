@@ -1,4 +1,3 @@
-// 게시글 작성 버튼 클릭 시 게시글 작성 페이지로 이동
 const backBtn = document.querySelector(".back-button");
 const modifyBtn = document.querySelector('.submit-button');
 const fileInput = document.getElementById('image');

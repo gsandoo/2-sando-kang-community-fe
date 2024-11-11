@@ -11,7 +11,7 @@ function validateForm() {
     let pwCheck = false
     let cfPwCheck = false
 
-    // 비밀번호 유효성 검사
+    //NOTE: 비밀번호 유효성 검사
     if (!inputPassword.value.trim()) {
         pwError.style.display = 'block'
         pwError.innerText = '  *비밀번호를 입력해주세요.'
@@ -23,7 +23,7 @@ function validateForm() {
         pwError.style.display = 'none'
     }
 
-    // 비밀번호 확인 유효성 검사
+    //NOTE: 비밀번호 확인 유효성 검사
     if(!confirmPassword.value.trim()) {
         cfPwError.style.display = 'block'
         cfPwError.innerText = '  *비밀번호를 한번 더 입력해주세요.'
@@ -44,7 +44,7 @@ function validateForm() {
     }
   }
 
- // TODO: 비밀번호 수정
+ //NOTE: 비밀번호 수정
  if (submit) {
     submit.addEventListener('click', (event) => {
       event.preventDefault();

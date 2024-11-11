@@ -1,3 +1,7 @@
+import { emailValidCheck, pwValidCheck, confirmPwValidCheck, nicknameValidCheck } from './util/validation.js';
+import { handleLocation } from '../util/handleLocation.js';
+import { getLocalStorage, saveLocalStorage } from '../util/session.js';
+
 const inputEmail = document.getElementById('email');
 const inputPassword = document.getElementById('password');
 const confirmPassword = document.getElementById('confirm-password');
@@ -8,10 +12,9 @@ let pwError = document.getElementById('passwordError');
 let cfPwError = document.getElementById('confirmPasswordError');
 let nicknameError = document.getElementById('nicknameError');
 
-// 파일 입력 요소와 이미지 및 버튼 요소 선택
+//NOTE: 파일 입력 요소와 이미지 및 버튼 요소 선택
 const fileInput = document.getElementById('fileInput');
 const profileImage = document.getElementById('profileImage');
-
 const uploadButton = document.getElementById('uploadButton');
 const profileImageContainer = document.getElementById('profileImageContainer');
 const backButton = document.querySelector('.back-button');
@@ -25,7 +28,7 @@ function validateForm() {
     let nicknameCheck = false
     
 
-    // 이메일 유효성 검사
+    //NOTE: 이메일 유효성 검사
     if (!inputEmail.value.trim() || !emailValidCheck(inputEmail.value.trim())) {
       emailError.innerText = '  *올바른 이메일 주소 형식을 입력해주세요.'
       emailError.style.display = 'block'
@@ -34,7 +37,7 @@ function validateForm() {
       emailError.style.display = 'none'
     }
 
-    // 비밀번호 유효성 검사
+    //NOTE: 비밀번호 유효성 검사
     if (!inputPassword.value.trim()) {
         pwError.style.display = 'block'
         pwError.innerText = '  *비밀번호를 입력해주세요.'
@@ -115,40 +118,6 @@ submit.addEventListener('click', (event) => {
     }    
   });
   
-
-  function emailValidCheck(email) {
-    const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/
-    return pattern.test(email)
-  }
-
-  function pwValidCheck(value) {
-    return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/.test(
-      value,
-    )
-  }
-
-  function confirmPwValidCheck(value) {
-    return value === inputPassword.value.trim();
-  }
-
-  function nicknameValidCheck(value) {
-    if (!value) {
-        nicknameError.innerText = '  *닉네임을 입력해주세요.';
-        nicknameError.style.display = 'block';
-        return false;
-    } else if (/\s/.test(value)) {
-        nicknameError.innerText = '  *띄어쓰기를 없애주세요.';
-        nicknameError.style.display = 'block';
-        return false;
-    } else if (value.length > 10) { 
-        nicknameError.innerText = '  *닉네임은 최대 10자까지 작성 가능합니다.';
-        nicknameError.style.display = 'block';
-        return false;
-    } else {
-        nicknameError.style.display = 'none';
-        return true;
-    }
-  }
   
   inputEmail.addEventListener('input', validateForm)
   inputPassword.addEventListener('input', validateForm)
@@ -179,22 +148,8 @@ submit.addEventListener('click', (event) => {
 });
 
 
-  backButton.addEventListener('click', ()=>{
-      handleLocation("/html/Log in.html");
-  })
-
-  function saveLocalStorage(key, value) {
-    localStorage.removeItem(key);
-    localStorage.setItem(key, value);
-  }
-  
-  function getLocalStorage(key) {
-    const storedValue = localStorage.getItem(key);
-    return storedValue;
-  }
-
-  function handleLocation(url) {
-      window.location.href = url
-  }
+backButton.addEventListener('click', ()=>{
+    handleLocation("/html/Log in.html");
+})
 
 

@@ -1,4 +1,6 @@
-
+import { emailValidCheck, pwValidCheck } from '../util/validation.js';
+import { handleLocation } from '../util/handleLocation.js';
+import { getLocalStorage, saveLocalStorage } from '../util/session.js';
   
   const signInTxt = document.querySelector('.signin-button')
   const inputEmail = document.getElementById('email')
@@ -44,8 +46,7 @@
     }
   }
 
-  // TODO: 로그인 api 연동 추가
- 
+//NOTE: 로그인
 submit.addEventListener('click', (event) => {
     event.preventDefault()
     if (validateForm()) {
@@ -68,7 +69,7 @@ submit.addEventListener('click', (event) => {
         const success = data.success;
         if(success){
           alert('로그인이 정상적으로 이루어졌습니다.')
-          const userId = data.user_id; // `user_id` 값만 추출
+          const userId = data.user_id; 
           localStorage.setItem("userId", userId); 
           handleLocation("/html/Posts.html");
         }else{
@@ -79,42 +80,12 @@ submit.addEventListener('click', (event) => {
     }    
   });
 
-  
-  
-   
 
-  // TODO: 회원가입 api 연동 추가
   if (signInTxt) {
     signInTxt.addEventListener('click', () =>
     handleLocation('/html/signin.html'),
     )
   }
 
-  function emailValidCheck(email) {
-    const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/
-    return pattern.test(email)
-  }
-
-  function pwValidCheck(value) {
-    return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/.test(
-      value,
-    )
-  }
-
-  inputEmail.addEventListener('input', validateForm)
-  inputPassword.addEventListener('input', validateForm)
-
-
-  function saveLocalStorage(key, value) {
-    localStorage.removeItem(key);
-    localStorage.setItem(key, value);
-  }
-
-  function getLocalStorage(key) {
-    const storedValue = localStorage.getItem(key);
-    return storedValue;
-  }
-
-  function handleLocation(url) {
-    window.location.href = url;
-  }
+inputEmail.addEventListener('input', validateForm)
+inputPassword.addEventListener('input', validateForm)

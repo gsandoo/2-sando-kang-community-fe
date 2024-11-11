@@ -1,5 +1,3 @@
-// TODO: 요구사항에 맞춘 추가 작업 필요
-// 게시글 작성 버튼 클릭 시 게시글 작성 페이지로 이동
 const backBtn = document.querySelector(".page-back");
 const title = document.getElementById('title');
 const content = document.getElementById('content');

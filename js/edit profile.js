@@ -83,9 +83,9 @@ function logout(event) {
                 if (response.ok && data.success) {
                     alert("로그아웃이 완료되었습니다."); 
                     localStorage.removeItem('userId'); 
-                    handleLocation('/html/login.html'); // 로그인 페이지로 이동
+                    handleLocation('/html/login.html'); 
                 } else {
-                    throw new Error(data.message || '로그아웃 실패'); // 오류 발생
+                    throw new Error(data.message || '로그아웃 실패'); 
                 }
             });
         })
@@ -94,7 +94,7 @@ function logout(event) {
             alert(`오류: ${error.message}`);
         });
     } else {
-        alert('사용자 ID를 찾을 수 없습니다.'); // userId가 없을 경우 처리
+        alert('사용자 ID를 찾을 수 없습니다.'); 
     }
 }
 

@@ -1,3 +1,6 @@
+import { handleLocation } from '../util/handleLocation.js';
+import { getLocalStorage, saveLocalStorage } from '../util/session.js';
+
 const profileImg = document.getElementById('profileImg');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const updateButton = document.getElementById('updateButton');
@@ -199,18 +202,3 @@ fileInput.addEventListener('change', (event) => {
 });
 
 logoutButton.addEventListener('click', logout); 
-
-
-function saveLocalStorage(key, value) {
-    localStorage.removeItem(key);
-    localStorage.setItem(key, value);
-}
-
-function getLocalStorage(key) {
-    const storedValue = localStorage.getItem(key);
-    return storedValue;
-}
-
-function handleLocation(url) {
-    window.location.href = url;
-}

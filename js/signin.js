@@ -1,4 +1,4 @@
-import { emailValidCheck, pwValidCheck, confirmPwValidCheck, nicknameValidCheck } from './util/validation.js';
+import { emailValidCheck, pwValidCheck, confirmPwValidCheck, nicknameValidCheck } from '../util/validation.js';
 import { handleLocation } from '../util/handleLocation.js';
 import { getLocalStorage, saveLocalStorage } from '../util/session.js';
 

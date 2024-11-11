@@ -1,3 +1,6 @@
+import { handleLocation } from '../util/handleLocation.js';
+import { getLocalStorage, saveLocalStorage } from '../util/session.js';
+
 const backBtn = document.querySelector(".back-button");
 const modifyBtn = document.querySelector('.submit-button');
 const fileInput = document.getElementById('image');
@@ -86,17 +89,4 @@ fileInput.addEventListener('change', (event) => {
       }
 });
 
-function saveLocalStorage(key, value) {
-    localStorage.removeItem(key);
-    localStorage.setItem(key, value);
-  }
 
-function getLocalStorage(key) {
-    const storedValue = localStorage.getItem(key);
-    return storedValue;
-}
-
-
-function handleLocation(url) {
-    window.location.href = url
-}

@@ -1,3 +1,5 @@
+import { getLocalStorage, saveLocalStorage } from '../util/session.js';
+
 const backBtn = document.querySelector(".page-back");
 const title = document.getElementById('title');
 const content = document.getElementById('content');
@@ -87,16 +89,3 @@ fileInput.addEventListener('change', (event) => {
       }
 });
 
-function saveLocalStorage(key, value) {
-    localStorage.removeItem(key);
-    localStorage.setItem(key, value);
-}
-
-function getLocalStorage(key) {
-    const storedValue = localStorage.getItem(key);
-    return storedValue;
-}
-
-function handleLocation(url) {
-    window.location.href = url
-}

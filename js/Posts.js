@@ -1,3 +1,6 @@
+import { handleLocation } from '../util/handleLocation.js';
+import { getLocalStorage, saveLocalStorage } from '../util/session.js';
+
 const modifyBtn = document.querySelector(".write-post");
 const postContainer = document.getElementById('posts');
 const loading = document.getElementById('loading');
@@ -113,15 +116,3 @@ window.addEventListener('scroll', () => {
     }
 });
 
-function saveLocalStorage(key, value) {
-    localStorage.setItem(key, value);
-}
-
-function getLocalStorage(key) {
-    const storedValue = localStorage.getItem(key);
-    return storedValue;
-}
-
-function handleLocation(url) {
-    window.location.href = url;
-}

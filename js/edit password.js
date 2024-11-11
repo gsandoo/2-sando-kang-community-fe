@@ -1,9 +1,12 @@
+import { pwValidCheck, confirmPwValidCheck } from '../util/validation.js';
+import { handleLocation } from '../util/handleLocation.js';
+import { getLocalStorage, saveLocalStorage } from '../util/session.js';
+
 const inputPassword = document.getElementById('password');
 const confirmPassword = document.getElementById('confirm-password');
 let pwError = document.getElementById('passwordError');
 let cfPwError = document.getElementById('confirmPasswordError');
 const submit = document.getElementById('modify-button');
-
 
 
 function validateForm() {
@@ -86,27 +89,3 @@ function validateForm() {
 
   inputPassword.addEventListener('input', validateForm)
   confirmPassword.addEventListener('input', validateForm);
-
-  function pwValidCheck(value) {
-    return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/.test(
-      value,
-    )
-  }
-
-  function confirmPwValidCheck(value) {
-    return value === inputPassword.value.trim();
-  }
-
-
-  function saveLocalStorage(key, value) {
-    localStorage.removeItem(key);
-    localStorage.setItem(key, value);
-  }
-  function getLocalStorage(key) {
-    const storedValue = localStorage.getItem(key);
-    return storedValue;
-  }
-
-  function handleLocation(url) {
-    window.location.href = url
-  }

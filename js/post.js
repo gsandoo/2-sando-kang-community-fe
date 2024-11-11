@@ -1,3 +1,6 @@
+import { handleLocation } from '../util/handleLocation.js';
+import { getLocalStorage, saveLocalStorage } from '../util/session.js';
+
 const textarea = document.getElementById('text');
 const commentSubmitDiv = document.querySelector('.comment-submit');
 
@@ -172,15 +175,4 @@ commentSubmit.addEventListener('click',()=>{
     ///
 })
 
-function saveLocalStorage(key, value) {
-    localStorage.setItem(key, value);
-}
 
-function getLocalStorage(key) {
-    const storedValue = localStorage.getItem(key);
-    return storedValue;
-}
-
-function handleLocation(url) {
-    window.location.href = url
-}

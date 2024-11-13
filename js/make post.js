@@ -31,10 +31,11 @@ function validateForm() {
     }
 }
 
+//NOTE: 게시물 작성
 function makePost(event) {
     event.preventDefault();
 
-    const userId = 1;
+    const userId = getLocalStorage('userId');
     const title = getLocalStorage('title');
     const content = getLocalStorage('content');
     const image = getLocalStorage('imageUrl');

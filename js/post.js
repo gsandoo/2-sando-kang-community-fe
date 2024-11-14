@@ -3,6 +3,7 @@ import { getLocalStorage, saveLocalStorage } from '../util/session.js';
 import {getCurrentDate} from '../util/yyyymmdd.js';
 
 const textarea = document.getElementById('text');
+const likesCnt = document.getElementById('likesCount');
 
 const commentModal = document.querySelector('.comment-modal');
 const commentDeleteCancel = document.querySelector('#comment-cancel');
@@ -61,9 +62,9 @@ async function applyDataToPage() {
 
         Object.keys(fields).forEach(key => {
             const value = postData[key];
-            if (!value) {
+            if (value == null) {
                 console.log(`value 없음: ${key}`);
-                return;
+                value = 0;
             }
 
             const field = fields[key];
@@ -79,7 +80,7 @@ async function applyDataToPage() {
 
 
         const imageElement = document.querySelector('.post-img img');
-        if (postData.image && typeof postData.image === 'string' && postData.image.startsWith('data:image')) {
+        if (postData.image ) {
             console.log("Received Image Data:", postData.image);
             imageElement.src = postData.image; 
         } else {
@@ -87,12 +88,7 @@ async function applyDataToPage() {
             imageElement.src = '/assets/images/logo/board-list-icon.png'; 
         }
 
-
-    
-
         const commentsSection = document.querySelector('.comments-section');
-    
-        
         if (commentsSection && Array.isArray(postData.comment)) {
             postData.comment.forEach(comment => {
                 const commentElement = document.createElement('div');
@@ -275,16 +271,34 @@ async function deletePost(event) {
 }
 
 //TODO: 댓글 좋아요 누를 시
-function updatePostStats() {
+async function updatePostStats() {
     
-    fetch('') 
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('likesCount').innerText = `${formatNumber(data.likes)} 좋아요수`;
-            document.getElementById('viewsCount').innerText = `${formatNumber(data.views)} 조회수`;
-            document.getElementById('commentsCount').innerText = `${formatNumber(data.comments)} 댓글`;
-        })
-        .catch(error => console.error('Error fetching post stats:', error));
+    const postId = getLocalStorage("postId");
+    try {
+        
+        const response =  await fetch(`http://localhost:3000/api/post`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                post_id : postId
+            }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            alert('댓글 수정이 완료되었습니다!');
+            location.reload(); 
+        } else {
+            console.error('댓글 수정 실패:', data.message);
+            alert('댓글 수정에 실패했습니다.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('서버 오류가 발생했습니다.');
+    }
+    
 }
 
 
@@ -386,6 +400,9 @@ commentDeleteCancel.addEventListener("click", () => {
 
     selectedCommentId = null; // ID 초기화
 });
+
+//NOTE: 게시물 좋아요
+likesCnt.addEventListener("click", updatePostStats);
 
 
 

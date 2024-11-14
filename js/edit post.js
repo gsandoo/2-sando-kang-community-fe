@@ -35,22 +35,21 @@ function modifyData(event) {
     const fileInput = document.getElementById('image');
     const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
+    console.log(`userId:  ${userId}`);
+    console.log(`postId:  ${postId}`);
+    console.log(`updatedTitle:  ${updatedTitle}`);
+    console.log(`updatedContent:  ${updatedContent}`);
+    console.log(`fileInput:  ${fileInput.files[0]}`);
+    console.log(`date:  ${date}`);
+
+    const arr = [userId,postId,updatedTitle,updatedContent,fileInput.files[0],date];
     const formData = new FormData();
     formData.append('user_id', userId);
     formData.append('post_id', postId);
     formData.append('title', updatedTitle);
     formData.append('content', updatedContent);
     formData.append('date', date);
-
-    if (fileInput.files.length > 0) {
-        formData.append('image', fileInput.files[0]);
-        
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            saveLocalStorage('image', event.target.result);
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-    }
+    formData.append('image', fileInput.files[0]);
 
     fetch(`http://localhost:3000/api/post`, {
         method: "PUT",
@@ -80,14 +79,13 @@ backBtn.addEventListener("click", clickHandler);
 
 fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
-    
+
     if (file) {
-        const updatedImg = URL.createObjectURL(file);
-        const fileName = updatedImg.split('/').pop();
-        document.querySelector('.file-name').innerText = fileName;
-    }else {
+            document.querySelector('.file-name').innerText = file.name;
+    } else {
         console.log("파일이 선택되지 않았습니다.");
-      }
+    }
 });
+
 
 

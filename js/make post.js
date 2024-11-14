@@ -38,7 +38,7 @@ function makePost(event) {
     const userId = getLocalStorage('userId');
     const title = getLocalStorage('title');
     const content = getLocalStorage('content');
-    const image = getLocalStorage('imageUrl');
+    const image = getLocalStorage('imageData'); 
 
     fetch('http://localhost:3000/api/post', {
         method: 'POST',
@@ -46,17 +46,17 @@ function makePost(event) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            user_id : userId,
+            user_id: userId,
             title: title,
             content: content,
-            image : image
-          }),
+            image: image 
+        }),
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             alert('게시글 작성이 완료되었습니다!');
-            window.location.href = '/html/Posts.html';
+            
         } else {
             console.error('게시글 작성 실패:', data.message);
             alert('게시글 작성에 실패했습니다.');
@@ -66,8 +66,8 @@ function makePost(event) {
         console.error('Error:', error);
         alert('서버 오류가 발생했습니다.');
     });
-    
 }
+
 
 title.addEventListener('input', validateForm)
 content.addEventListener('input', validateForm);
@@ -79,14 +79,54 @@ backBtn.addEventListener('click', () => {
 
 fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
-    
+
     if (file) {
-        const updatedImg = URL.createObjectURL(file);
-        const fileName = updatedImg.split('/').pop();
-        saveLocalStorage('imageUrl', fileName);
-        document.querySelector('.file-name').innerText = fileName;
-    }else {
+        const reader = new FileReader();
+
+        reader.onloadend = function() {
+            const img = new Image();
+            img.src = reader.result;
+
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                const MAX_WIDTH = 200;
+                const MAX_HEIGHT = 200;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const compressedBase64 = canvas.toDataURL('image/png');
+
+                saveLocalStorage('imageData', compressedBase64);
+
+                document.querySelector('.file-name').innerText = file.name;
+                console.log("Compressed image saved to localStorage.");
+            };
+        };
+
+        reader.readAsDataURL(file);  // 파일을 Base64로 읽기
+    } else {
         console.log("파일이 선택되지 않았습니다.");
-      }
+    }
 });
+
+
+
 

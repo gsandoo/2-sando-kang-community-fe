@@ -87,9 +87,9 @@ submit.addEventListener('click', (event) => {
       const formData = new FormData();
       
       formData.append("email", email);
-      formData.append("pw", pw);
+      formData.append("password", pw);
       formData.append("nickname", nickname);
-      formData.append("image", url);
+      formData.append("profile", url);
 
       fetch(`http://localhost:3000/api/auth/signin`, {
           method: "POST",

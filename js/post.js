@@ -35,7 +35,7 @@ async function applyDataToPage() {
         console.log(`http://localhost:3000/api/post/${postId} 호출`)
         
         
-        const response = await fetch(`http://localhost:3000/api/post/${postId}`);
+        const response = await fetch(`http://localhost:3000/api/post/1`);
         const responseData = await response.json();
         console.log('Fetched data:', responseData);
 

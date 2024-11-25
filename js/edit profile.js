@@ -72,7 +72,7 @@ function logout(event) {
     const userId = getLocalStorage('userId'); 
 
     if (userId) {
-        fetch('http://localhost:3000/api/auth/logout', {
+        fetch('/api/auth/logout', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

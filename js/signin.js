@@ -18,6 +18,7 @@ const profileImage = document.getElementById('profileImage');
 const uploadButton = document.getElementById('uploadButton');
 const profileImageContainer = document.getElementById('profileImageContainer');
 const backButton = document.querySelector('.back-button');
+
 let imageCheck = false
 
 
@@ -91,7 +92,7 @@ submit.addEventListener('click', (event) => {
       formData.append("nickname", nickname);
       formData.append("profile", url);
 
-      fetch(`http://localhost:3000/api/auth/signin`, {
+      fetch(`/api/auth/signin`, {
           method: "POST",
           body: formData,
       })

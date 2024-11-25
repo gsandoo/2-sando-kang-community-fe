@@ -151,7 +151,7 @@ async function addComment() {
     const currentDate = getCurrentDate();
 
     console.log(userId);
-    await fetch('http://localhost:3000/api/comment', {
+    await fetch('/api/comment', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",

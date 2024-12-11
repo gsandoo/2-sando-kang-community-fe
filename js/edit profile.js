@@ -125,7 +125,7 @@ updateButton.addEventListener('click', async () => {
             formData.append('profile', file);
         }
 
-        const response = await fetch('http://localhost:3000/api/auth/nickname', {
+        const response = await fetch('/api/auth/nickname', {
             method: 'PATCH',
             body: formData,
         });

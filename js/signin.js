@@ -102,7 +102,7 @@ submit.addEventListener('click', (event) => {
           const message = data.message;
           if(success){
               alert('회원가입이 정상적으로 이루어졌습니다.');
-              handleLocation('/html/Posts.html');
+              handleLocation('/html/Log-in.html');
           } else {
               alert(`회원가입 문제 발생: ${message}`);
           }

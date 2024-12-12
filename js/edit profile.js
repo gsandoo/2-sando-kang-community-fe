@@ -16,7 +16,6 @@ const logoutButton = document.querySelector('.dropdown-menu a:last-child');
 
 const fileInput = document.getElementById('fileInput');
 const profileImage = document.getElementById('profileImage');
-const headerProfile = document.getElementById('profileImg');
 const uploadButton = document.getElementById('uploadButton');
 
 
